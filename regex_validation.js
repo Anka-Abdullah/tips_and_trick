@@ -11,14 +11,6 @@ const user = {
 };
 
 const userValidation = {
-  userName: /[a-zA-Z0-9]{3,}$/,
-  age: /([0-9]{1,})/,
-  email: /[a-zA-Z0-9]{3,}@[a-zA-Z]{3,}\.com$/,
-  address: /(){5}\w+/,
-  password: /(){8,16}/,
-};
-
-const user2Validation = {
   userName: {
     regex: /[a-zA-Z0-9]{3,}$/,
     notNull: false,
@@ -64,7 +56,7 @@ const addDate = (data) => {
   return rs;
 };
 
-const validate2 = (data, validation) => {
+const validate = (data, validation) => {
   let newData = {};
 
   Object.keys(validation).map((key) => {
@@ -95,17 +87,17 @@ const validate2 = (data, validation) => {
   return addDate(newData);
 };
 
-validate2(user, user2Validation);
+validate(user, userValidation);
 // console.log(userValidation['userName'][0]);
 
-const str = {
-  a: "./03/03",
-  b: "./03/02",
-  c: "./03/01",
-  d: "./03/wkwk",
-}; // output './03/wkwk'
+// const str = {
+//   a: "./03/03",
+//   b: "./03/02",
+//   c: "./03/01",
+//   d: "./03/wkwk",
+// }; // output './03/wkwk'
 
-const regex = /.{5}[a-z]/g;
+// const regex = /.{5}[a-z]/g;
 
 // Object.keys(str).map((key) => {
 //   if (regex.test(str[key])) {
