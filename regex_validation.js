@@ -1,10 +1,10 @@
 const user = {
-  userName: "anka23",
+  userName: "a",
   age: 29,
   email: "dono234@gmail.com",
   address: "jakarta",
-  password: "    klj9ujihj",
-  // noRek: "99999",
+  // password: "    kj",
+  phone: "099999",
   date: "22 feb",
   createdAt: "Sat Apr 16 2022 17:46:20 GMT+0700 (Western Indonesia Time)",
   updatedAt: "Sat Apr 16 2022 17:46:20 GMT+0700 (Western Indonesia Time)",
@@ -28,10 +28,10 @@ const userValidation = {
     notNull: false,
   },
   password: {
-    regex: /(){8,16}$/,
+    regex: /^(.){0,16}$/,
     notNull: false,
   },
-  noRek: {
+  phone: {
     regex: /^[1-9]{1}[0-9]{0,12}$/,
     notNull: true,
   },
@@ -57,37 +57,38 @@ const addDate = (data) => {
 };
 
 const validate = (data, validation) => {
-  let newData = {};
+  let newData = {},
+    message = {},
+    error = false;
 
   Object.keys(validation).map((key) => {
-    // start looping
+    let v = validation[key],
+      w = data[key],
+      x = newData[key];
+
     if (data[key]) {
-      newData[key] =
-        typeof data[key] === "string" ? data[key].trim() : data[key];
+      x = typeof w === "string" ? w.trim() : w;
     }
-    // if the data cannot be empty || notNull === true
-    if (!validation[key].notNull) {
-      if (!newData[key]) {
-        console.log(`${key} is not valid`);
-        return;
+    if (!v.notNull) {
+      if (x === "" || x === null || x === undefined) {
+        error = true;
+        message[key] = `required`;
       }
-      if (!validation[key].regex.test(newData[key])) {
-        console.log(`${key} is not valid`);
-        return;
+      if (!v.regex.test(x)) {
+        error = true;
+        message[key] = `invalid`;
       }
+    } else if (!v.regex.test(x)) {
+      error = true;
+      message[key] = `invalid`;
     }
-    // If the data can be empty
-    if (validation[key].notNull && newData[key]) {
-      if (!validation[key].regex.test(newData[key])) {
-        console.log(`${key} is not valid`);
-        return;
-      }
-    }
-  }); // end of map
-  return addDate(newData);
+  });
+
+  return error ? message : addDate(newData);
 };
 
-validate(user, userValidation);
+const OSM = validate(user, userValidation);
+console.log(OSM);
 // console.log(userValidation['userName'][0]);
 
 // const str = {
