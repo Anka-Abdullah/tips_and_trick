@@ -1,10 +1,10 @@
 const user = {
-  userName: "a",
+  userName: "anka",
   age: 29,
   email: "dono234@gmail.com",
   address: "jakarta",
-  // password: "    kj",
-  phone: "099999",
+  password: "    kj123456",
+  phone: "99999",
   date: "22 feb",
   createdAt: "Sat Apr 16 2022 17:46:20 GMT+0700 (Western Indonesia Time)",
   updatedAt: "Sat Apr 16 2022 17:46:20 GMT+0700 (Western Indonesia Time)",
@@ -28,7 +28,7 @@ const userValidation = {
     notNull: false,
   },
   password: {
-    regex: /^(.){0,16}$/,
+    regex: /^(.){8,16}$/,
     notNull: false,
   },
   phone: {
@@ -38,53 +38,35 @@ const userValidation = {
 };
 
 const addDate = (data) => {
-  let rs;
   const date = {
     createdAt: new Date().toString(),
     updatedAt: new Date().toString(),
   };
-  if (data.createdAt) {
-    data.updatedAt = date.updatedAt;
-    rs = data;
-  } else {
-    rs = {
-      ...data,
-      ...date,
-    };
-  }
-  console.log(rs);
-  return rs;
+  data.createdAt ? (data.updatedAt = date.updatedAt) : "";
+  return data.createdAt ? data : { ...data, ...date };
 };
-
 const validate = (data, validation) => {
-  let newData = {},
-    message = {},
-    error = false;
+  let newData = {}
 
   Object.keys(validation).map((key) => {
     let v = validation[key],
-      w = data[key],
-      x = newData[key];
+      w = data[key]
 
     if (data[key]) {
-      x = typeof w === "string" ? w.trim() : w;
+      newData[key] = typeof w === "string" ? w.trim() : w;
     }
     if (!v.notNull) {
-      if (x === "" || x === null || x === undefined) {
-        error = true;
-        message[key] = `required`;
+      if (!newData[key]) {
+        throw new Error(`ERROR : ${key} is null`);
       }
-      if (!v.regex.test(x)) {
-        error = true;
-        message[key] = `invalid`;
+      if (!v.regex.test(newData[key])) {
+        throw new Error(`ERROR : ${key} is not valid`);
       }
-    } else if (!v.regex.test(x)) {
-      error = true;
-      message[key] = `invalid`;
+    } else if (!v.regex.test(newData[key])) {
+      throw new Error(`ERROR : ${key} is not valid`);
     }
   });
-
-  return error ? message : addDate(newData);
+  return addDate(newData);
 };
 
 const OSM = validate(user, userValidation);
